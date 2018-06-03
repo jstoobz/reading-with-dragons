@@ -1,0 +1,29 @@
+# Project specific files
+.htaccess
+sitemap.xml
+
+# OS, editor, and cache files
+._*
+.DS_Store
+.tmp
+[Dd]esktop.ini
+Thumbs.db
+
+# External disk files
+.Spotlight-V100
+.Trashes
+
+# Node related files
+node_modules
+
+# Extensions
+*~
+*.diff
+*.err
+*.log
+*.orig
+*.pyc
+*.rej
+*.sass-cache
+*.sw?
+*.vi
