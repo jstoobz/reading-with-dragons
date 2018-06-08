@@ -20,6 +20,7 @@ var env,
     lineec;
 
 env = process.env.NODE_ENV || 'development';
+
 dir = {
     src: 'assets/',
     build: '../2.\ Development/' + themeName + '/wp-content/themes/' + themeName + '/',
