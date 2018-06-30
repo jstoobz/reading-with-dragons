@@ -23,9 +23,12 @@ env = process.env.NODE_ENV || 'development';
 
 dir = {
     src: 'assets/',
+    // build: 'build/' + themeName + '/wp-content/themes/' + themeName + '/',
     build: '../2.\ Development/' + themeName + '/wp-content/themes/' + themeName + '/',
     prod: '../1.\ Production/' + themePackage + '/' + themeName + '/',
+    // prod: '../1.\ Production/' + themePackage + '/' + themeName + '/',
     prodZip: '../1.\ Production/' + themePackage + '/'
+    // prodZip: '../1.\ Production/' + themePackage + '/'
 };
 
 php = {
