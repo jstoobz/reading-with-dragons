@@ -24,34 +24,38 @@
 <div id="page" class="site">
 	<a class="skip-link screen-reader-text" href="#content"><?php esc_html_e( 'Skip to content', 'readingwithdragons' ); ?></a>
 
-	<header id="masthead" class="site-header">
+	<?php if ( get_header_image() && is_front_page() ) : ?>
+	<figure class="header-image">
+		<a href="<?php echo esc_url( home_url( '/' ) ); ?>" rel="home">
+			<img src="<?php header_image(); ?>" width="<?php echo esc_attr( get_custom_header()->width ); ?>" height="<?php echo esc_attr( get_custom_header()->height ); ?>" alt="">
+		</a>
+	</figure><!-- .header-image -->
+	<?php endif; // End header image check. ?>
+
+	<header id="masthead" class="site-header" role="banner">
 		<div class="site-branding">
+
+			<?php the_custom_logo(); ?>
+			<div class="site-branding__text">
 			<?php
-			the_custom_logo();
-			if ( is_front_page() && is_home() ) :
-				?>
+			if ( is_front_page() && is_home() ) : ?>
 				<h1 class="site-title"><a href="<?php echo esc_url( home_url( '/' ) ); ?>" rel="home"><?php bloginfo( 'name' ); ?></a></h1>
-				<?php
-			else :
-				?>
+			<?php else : ?>
 				<p class="site-title"><a href="<?php echo esc_url( home_url( '/' ) ); ?>" rel="home"><?php bloginfo( 'name' ); ?></a></p>
 				<?php
 			endif;
+
 			$readingwithdragons_description = get_bloginfo( 'description', 'display' );
-			if ( $readingwithdragons_description || is_customize_preview() ) :
-				?>
+			if ( $readingwithdragons_description || is_customize_preview() ) : ?>
 				<p class="site-description"><?php echo $readingwithdragons_description; /* WPCS: xss ok. */ ?></p>
-			<?php endif; ?>
+			<?php
+			endif; ?>
+			</div><!-- .site-branding__text -->
 		</div><!-- .site-branding -->
 
 		<nav id="site-navigation" class="main-navigation">
 			<button class="menu-toggle" aria-controls="primary-menu" aria-expanded="false"><?php esc_html_e( 'Primary Menu', 'readingwithdragons' ); ?></button>
-			<?php
-			wp_nav_menu( array(
-				'theme_location' => 'menu-1',
-				'menu_id'        => 'primary-menu',
-			) );
-			?>
+			<?php	wp_nav_menu( array( 'theme_location' => 'menu-1',	'menu_id' => 'primary-menu', ) ); ?>
 		</nav><!-- #site-navigation -->
 	</header><!-- #masthead -->
 
