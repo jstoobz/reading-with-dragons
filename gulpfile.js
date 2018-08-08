@@ -1,20 +1,21 @@
-var gulp = require('gulp'),
+const gulp = require('gulp'),
     gulpLoadPlugins = require('gulp-load-plugins'),
     plugins = gulpLoadPlugins({
         pattern: ['gulp-*', 'gulp.*', 'autoprefixer', 'browser-sync', 'cssnano', 'css-mqpacker', 'del', 'postcss-assets', 'run-sequence']
     });
 
-var themeName = 'readingwithdragons',
+const themeName = 'readingwithdragons',
     themePackage = 'Reading with Dragons',
     themeURL = 'readingwithdragons.rwd';
 
-var env,
+let env,
     dir,
     php,
     images,
     sass,
     sassStyle,
     js,
+    readMe,
     languages,
     bsync,
     lineec;
@@ -23,12 +24,9 @@ env = process.env.NODE_ENV || 'development';
 
 dir = {
     src: 'assets/',
-    // build: 'build/' + themeName + '/wp-content/themes/' + themeName + '/',
     build: '../2.\ Development/' + themeName + '/wp-content/themes/' + themeName + '/',
     prod: '../1.\ Production/' + themePackage + '/' + themeName + '/',
-    // prod: '../1.\ Production/' + themePackage + '/' + themeName + '/',
     prodZip: '../1.\ Production/' + themePackage + '/'
-    // prodZip: '../1.\ Production/' + themePackage + '/'
 };
 
 php = {
@@ -85,6 +83,12 @@ js = {
     }
 };
 
+readMe = {
+    src:    dir.src + 'README.md',
+    build:   dir.build,
+    prod:   dir.prod
+};
+
 bsync = {
     bsyncOpts: {
         proxy: 'http://' + themeURL + '/',
@@ -128,7 +132,7 @@ lineec = {
     }
 };
 
-if(env === 'development'){
+if (env === 'development') {
     sassStyle = 'expanded';
 } else {
     sassStyle = 'compressed';
@@ -188,6 +192,7 @@ gulp.task('js', () => {
         .pipe(plugins.if(env === 'development', plugins.sourcemaps.init()))
         .pipe(plugins.jshint())
         .pipe(plugins.jshint.reporter('jshint-stylish'))
+        .pipe(plugins.babel({ presets: ['env'] }))
         .pipe(plugins.concat(js.filename))
         .pipe(plugins.if(env === 'production', plugins.rename(js.suffix)))
         .pipe(plugins.if(env === 'production', plugins.stripDebug()))
@@ -198,6 +203,14 @@ gulp.task('js', () => {
         .pipe(plugins.if(env === 'production', gulp.dest(js.prod)))
         .pipe(plugins.browserSync.reload({stream: true}))
         .pipe(plugins.notify({onLast: true, message: () => `js compiled! ${s.prettySize}`}))
+});
+
+gulp.task('readme', () => {
+    const s = plugins.size();
+    return gulp.src(readMe.src)
+        .pipe(plugins.if(env === 'development', gulp.dest(readMe.build)))
+        .pipe(plugins.if(env === 'production', gulp.dest(readMe.prod)))
+        .pipe(plugins.notify({onLast: true, message: () => `readme compiled! ${s.prettySize}`}))
 });
 
 gulp.task('translate', () => {
@@ -231,7 +244,7 @@ gulp.task('default', (cb) => {
     )
 });
 
-gulp.task('build', ['php', 'sass', 'js']);
+gulp.task('build', ['php', 'sass', 'js', 'readme']);
 
 gulp.task('build:dev', (cb) => {
     plugins.runSequence(
